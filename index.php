@@ -7,7 +7,7 @@
     <title>Hotel Elun - Frutillar</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
     <style>
         /* Pequeños ajustes de estilo directamente aquí para empezar */
         .hero-section {
@@ -70,6 +70,45 @@
             <p>Aquí presentaremos los 4 tipos de habitaciones...</p>
         </section>
         <hr>
+        <section id="galeria" class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Nuestra Galería</h2>
+
+                <?php
+                // Incluimos la conexión a la base de datos una sola vez si no se ha hecho antes
+                // (Si ya tienes una conexión abierta, puedes quitar esta línea)
+                require_once 'includes/db_connect.php';
+
+                // Consultamos las imágenes de la galería
+                $sql_gallery = "SELECT image_path, caption FROM gallery_images ORDER BY uploaded_at DESC";
+                $result_gallery = $conn->query($sql_gallery);
+
+                if ($result_gallery && $result_gallery->num_rows > 0) {
+                ?>
+                    <div class="gallery row">
+                        <?php while ($image = $result_gallery->fetch_assoc()) { ?>
+                            <div class="col-md-4 col-lg-3 mb-4">
+                                <a href="<?php echo htmlspecialchars($image['image_path']); ?>"
+                                    class="card-link"
+                                    data-caption="<?php echo htmlspecialchars($image['caption']); ?>">
+                                    <img src="<?php echo htmlspecialchars($image['image_path']); ?>"
+                                        class="img-fluid rounded shadow-sm"
+                                        alt="<?php echo htmlspecialchars($image['caption']); ?>"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
+                                </a>
+                            </div>
+                        <?php } // Fin del while 
+                        ?>
+                    </div> <?php
+                        } else {
+                            echo '<p class="text-center">Próximamente tendremos más imágenes para mostrar.</p>';
+                        }
+                        // No cerramos la conexión aquí por si otros módulos la necesitan después
+                        // $conn->close();
+                            ?>
+            </div>
+        </section>
+        <hr>
         <section id="ubicacion" class="py-5">
             <h2>Ubicación</h2>
             <p>Aquí irá el mapa de Google Maps...</p>
@@ -87,6 +126,16 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" async></script>
+    <script>
+        // Esperamos a que todo el contenido de la ventana (imágenes, scripts, etc.) se haya cargado
+        window.addEventListener('load', function() {
+            // Solo entonces, buscamos la galería y la activamos
+            if (document.querySelector('.gallery')) {
+                baguetteBox.run('.gallery');
+            }
+        });
+    </script>
 </body>
 
 </html>

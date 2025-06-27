@@ -20,10 +20,6 @@ if (isset($_SESSION['message'])) {
   <div class="card-header">
     Subir Nueva Imagen
   </div>
-  <div class="card mb-4">
-  <div class="card-header">
-    Subir Nueva Imagen
-  </div>
   <div class="card-body">
     <form action="gallery_upload.php" method="POST" enctype="multipart/form-data">
       <div class="mb-3">
@@ -40,10 +36,6 @@ if (isset($_SESSION['message'])) {
 </div>
 
 <div class="card">
-  <div class="card-header">
-    Imágenes Actuales
-  </div>
-  <div class="card">
   <div class="card-header">
     Imágenes Actuales
   </div>
