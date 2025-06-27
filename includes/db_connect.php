@@ -15,7 +15,7 @@ $dbname = "hotelelun_web"; // <-- Reemplaza 'web' por el nombre que le diste a t
 $username_db = "hotelelun_admin"; // <-- Reemplaza 'admin' por el nombre que le diste a tu usuario de BD
 
 // La contraseña que asignaste a ese usuario de la base de datos
-$password_db = "kg^qMQEh#w$P"; // <-- Reemplaza por tu contraseña real
+$password_db = "q&'7iu(&na#{z,Y"; // <-- Reemplaza por tu contraseña real
 
 
 // --- NO MODIFICAR DEBAJO DE ESTA LÍNEA --- //
