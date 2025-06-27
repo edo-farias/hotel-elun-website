@@ -70,6 +70,57 @@
             <p>Aquí presentaremos los 4 tipos de habitaciones...</p>
         </section>
         <hr>
+        <section id="noticias" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Últimas Noticias y Avisos</h2>
+                <div class="row">
+
+                    <?php
+                    // Reutilizamos la conexión a la base de datos que ya debe estar abierta.
+                    // Si cerraste la conexión antes, necesitarás añadir: require_once 'includes/db_connect.php';
+
+                    // Consultamos las últimas 3 noticias publicadas
+                    // Usamos LIMIT 3 para no saturar la página principal.
+                    $sql_news = "SELECT title, content, created_at FROM news_articles WHERE is_published = 1 ORDER BY created_at DESC LIMIT 3";
+                    $result_news = $conn->query($sql_news);
+
+                    if ($result_news && $result_news->num_rows > 0) {
+                        while ($news_item = $result_news->fetch_assoc()) {
+                    ?>
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo htmlspecialchars($news_item['title']); ?></h5>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                Publicado el: <?php echo date('d \d\e F \d\e Y', strtotime($news_item['created_at'])); ?>
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <?php
+                                            // Acortamos el contenido para mostrar solo un extracto
+                                            $content_preview = strip_tags($news_item['content']);
+                                            if (strlen($content_preview) > 150) {
+                                                echo substr($content_preview, 0, 150) . "...";
+                                            } else {
+                                                echo $content_preview;
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php
+                        } // Fin del while
+                    } else {
+                        echo '<div class="col"><p class="text-center">No hay noticias recientes para mostrar.</p></div>';
+                    }
+                    ?>
+
+                </div>
+            </div>
+        </section>
+        <hr>
         <section id="galeria" class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center mb-5">Nuestra Galería</h2>
