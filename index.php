@@ -31,6 +31,25 @@ $popup_data = $result_popup->fetch_assoc();
             /* Alinea el botón abajo */
             justify-content: center;
         }
+
+        /* Estilos para hacer el mapa de Google responsive */
+        .map-responsive {
+            overflow: hidden;
+            padding-bottom: 56.25%;
+            /* Proporción 16:9 */
+            position: relative;
+            height: 0;
+            border-radius: 8px;
+            /* Bordes redondeados opcionales */
+        }
+
+        .map-responsive iframe {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
     </style>
 </head>
 
@@ -158,7 +177,9 @@ $popup_data = $result_popup->fetch_assoc();
         <hr>
         <section id="ubicacion" class="py-5">
             <h2>Ubicación</h2>
-            <p>Aquí irá el mapa de Google Maps...</p>
+            <div class="map-responsive">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5222.615676806089!2d-73.02103002252511!3d-41.145658645864835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96178dbe3e034d1d%3A0x338e7ddefb56100e!2sHotel%20Elun!5e1!3m2!1ses-419!2scl!4v1751136632668!5m2!1ses-419!2scl" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
         </section>
         <hr>
         <section id="contacto" class="py-5">
