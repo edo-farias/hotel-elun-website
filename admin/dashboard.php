@@ -11,7 +11,7 @@ require_once 'partials/header.php'; // Incluimos el header
 <ul>
   <li><a href="gallery.php">Gestionar Galería de Imágenes</a></li>
   <li><a href="news.php">Publicar Noticias o Avisos</a></li>
-  <li>Administrar Promoción Emergente</li>
+  <li><a href="popup.php">Administrar Promoción Emergente</a></li>
   <li>Gestionar Tipos de Habitaciones</li>
 </ul>
 

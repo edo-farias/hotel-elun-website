@@ -35,6 +35,9 @@ if (!isset($_SESSION['user_id'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="news.php">Gestionar Noticias</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="popup.php">Gestionar Pop-up</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">

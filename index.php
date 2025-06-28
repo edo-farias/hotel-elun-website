@@ -2,6 +2,10 @@
 // Conectamos a la base de datos UNA SOLA VEZ al principio de todo.
 // La variable $conn estará disponible para todo el resto del archivo.
 require_once 'includes/db_connect.php';
+// Consultar la configuración del pop-up
+$sql_popup = "SELECT * FROM popup_settings WHERE id = 1";
+$result_popup = $conn->query($sql_popup);
+$popup_data = $result_popup->fetch_assoc();
 ?>
 <!doctype html>
 <html lang="es">
@@ -31,7 +35,6 @@ require_once 'includes/db_connect.php';
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">Hotel Elun</a>
@@ -58,7 +61,7 @@ require_once 'includes/db_connect.php';
     </nav>
 
     <header id="inicio" class="hero-section text-white text-center">
-        <div class="pb-5 mb-5"> <a href="https://us2.cloudbeds.com/reservation/GiUR4A" target="_blank" class="btn btn-primary btn-lg">
+        <div class="pb-5 mb-5"><a href="https://us2.cloudbeds.com/reservation/GiUR4A" target="_blank" class="btn btn-primary btn-lg">
                 Reservar Ahora
             </a>
         </div>
@@ -79,9 +82,7 @@ require_once 'includes/db_connect.php';
             <div class="container">
                 <h2 class="text-center mb-5">Últimas Noticias y Avisos</h2>
                 <div class="row">
-
                     <?php
-
                     // Consultamos las últimas 3 noticias publicadas
                     // Usamos LIMIT 3 para no saturar la página principal.
                     $sql_news = "SELECT title, content, created_at FROM news_articles WHERE is_published = 1 ORDER BY created_at DESC LIMIT 3";
@@ -126,7 +127,6 @@ require_once 'includes/db_connect.php';
         <section id="galeria" class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center mb-5">Nuestra Galería</h2>
-
                 <?php
                 // Consultamos las imágenes de la galería
                 $sql_gallery = "SELECT image_path, caption FROM gallery_images ORDER BY uploaded_at DESC";
@@ -146,15 +146,12 @@ require_once 'includes/db_connect.php';
                                         style="width: 100%; height: 200px; object-fit: cover;">
                                 </a>
                             </div>
-                        <?php } // Fin del while 
-                        ?>
+                        <?php } ?>
                     </div>
                 <?php
                 } else {
                     echo '<p class="text-center">Próximamente tendremos más imágenes para mostrar.</p>';
                 }
-                // No cerramos la conexión aquí por si otros módulos la necesitan después
-                // $conn->close();
                 ?>
             </div>
         </section>
@@ -174,20 +171,55 @@ require_once 'includes/db_connect.php';
         <p>Hotel Elun | Dirección: Av. Philippi 123, Frutillar, Chile | Teléfono: +56 9 1234 5678 | Email: reservas@hotelelun.cl</p>
     </footer>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" async></script>
     <script>
-        // Esperamos a que todo el contenido de la ventana (imágenes, scripts, etc.) se haya cargado
         window.addEventListener('load', function() {
-            // Solo entonces, buscamos la galería y la activamos
             if (document.querySelector('.gallery')) {
                 baguetteBox.run('.gallery');
             }
         });
     </script>
+    <?php if ($popup_data) : ?>
+        <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="promoModalLabel"><?php echo htmlspecialchars($popup_data['title']); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <?php echo nl2br(htmlspecialchars($popup_data['content'])); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="<?php echo htmlspecialchars($popup_data['button_link']); ?>" class="btn btn-primary" target="_blank">
+                            <?php echo htmlspecialchars($popup_data['button_text']); ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <script>
+        <?php
+        // Este código PHP solo se imprimirá en la página si el pop-up está activo en la BD
+        if ($popup_data && $popup_data['is_active']) :
+        ?>
+            // Esperamos a que la página esté completamente cargada
+            window.addEventListener('load', function() {
+                // Revisamos si el pop-up ya se ha mostrado en esta sesión del navegador
+                if (!sessionStorage.getItem('promoModalShown')) {
+                    const promoModal = new bootstrap.Modal(document.getElementById('promoModal'));
+                    promoModal.show(); // Mostramos el pop-up
+
+                    // Guardamos un registro para no volver a mostrarlo en esta sesión
+                    sessionStorage.setItem('promoModalShown', 'true');
+                }
+            });
+        <?php endif; ?>
+    </script>
     <?php
-    // Cerramos la conexión a la base de datos UNA SOLA VEZ al final de todo.
     $conn->close();
     ?>
 </body>
