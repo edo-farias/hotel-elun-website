@@ -183,8 +183,36 @@ $popup_data = $result_popup->fetch_assoc();
         </section>
         <hr>
         <section id="contacto" class="py-5">
-            <h2>Contacto</h2>
-            <p>Aquí irá el formulario de contacto...</p>
+            <div class="container">
+                <h2 class="text-center mb-5">Contáctanos</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <form action="contact_process.php" method="POST">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Tu Nombre</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Tu Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Asunto</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Tu Mensaje</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Enviar Mensaje</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
