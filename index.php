@@ -1,3 +1,8 @@
+<?php
+// Conectamos a la base de datos UNA SOLA VEZ al principio de todo.
+// La variable $conn estará disponible para todo el resto del archivo.
+require_once 'includes/db_connect.php';
+?>
 <!doctype html>
 <html lang="es">
 
@@ -76,8 +81,6 @@
                 <div class="row">
 
                     <?php
-                    // Reutilizamos la conexión a la base de datos que ya debe estar abierta.
-                    // Si cerraste la conexión antes, necesitarás añadir: require_once 'includes/db_connect.php';
 
                     // Consultamos las últimas 3 noticias publicadas
                     // Usamos LIMIT 3 para no saturar la página principal.
@@ -116,7 +119,6 @@
                         echo '<div class="col"><p class="text-center">No hay noticias recientes para mostrar.</p></div>';
                     }
                     ?>
-
                 </div>
             </div>
         </section>
@@ -126,10 +128,6 @@
                 <h2 class="text-center mb-5">Nuestra Galería</h2>
 
                 <?php
-                // Incluimos la conexión a la base de datos una sola vez si no se ha hecho antes
-                // (Si ya tienes una conexión abierta, puedes quitar esta línea)
-                require_once 'includes/db_connect.php';
-
                 // Consultamos las imágenes de la galería
                 $sql_gallery = "SELECT image_path, caption FROM gallery_images ORDER BY uploaded_at DESC";
                 $result_gallery = $conn->query($sql_gallery);
@@ -150,13 +148,14 @@
                             </div>
                         <?php } // Fin del while 
                         ?>
-                    </div> <?php
-                        } else {
-                            echo '<p class="text-center">Próximamente tendremos más imágenes para mostrar.</p>';
-                        }
-                        // No cerramos la conexión aquí por si otros módulos la necesitan después
-                        // $conn->close();
-                            ?>
+                    </div>
+                <?php
+                } else {
+                    echo '<p class="text-center">Próximamente tendremos más imágenes para mostrar.</p>';
+                }
+                // No cerramos la conexión aquí por si otros módulos la necesitan después
+                // $conn->close();
+                ?>
             </div>
         </section>
         <hr>
@@ -187,6 +186,10 @@
             }
         });
     </script>
+    <?php
+    // Cerramos la conexión a la base de datos UNA SOLA VEZ al final de todo.
+    $conn->close();
+    ?>
 </body>
 
 </html>
